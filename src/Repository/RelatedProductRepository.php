@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\RelatedProducts;
+use App\Entity\RelatedProduct;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method RelatedProducts|null find($id, $lockMode = null, $lockVersion = null)
- * @method RelatedProducts|null findOneBy(array $criteria, array $orderBy = null)
- * @method RelatedProducts[]    findAll()
- * @method RelatedProducts[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method RelatedProduct|null find($id, $lockMode = null, $lockVersion = null)
+ * @method RelatedProduct|null findOneBy(array $criteria, array $orderBy = null)
+ * @method RelatedProduct[]    findAll()
+ * @method RelatedProduct[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class RelatedProductsRepository extends ServiceEntityRepository
+class RelatedProductRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, RelatedProducts::class);
+        parent::__construct($registry, RelatedProduct::class);
     }
 
     // /**
-    //  * @return RelatedProducts[] Returns an array of RelatedProducts objects
+    //  * @return RelatedProduct[] Returns an array of RelatedProduct objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class RelatedProductsRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?RelatedProducts
+    public function findOneBySomeField($value): ?RelatedProduct
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.exampleField = :val')

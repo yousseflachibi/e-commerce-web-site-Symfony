@@ -6,7 +6,7 @@ use App\Repository\RelatedProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=RelatedProductsRepository::class)
+ * @ORM\Entity(repositoryClass=RelatedProductRepository::class)
  */
 class RelatedProduct
 {
@@ -19,7 +19,6 @@ class RelatedProduct
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="relatedProducts")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $product;
 
