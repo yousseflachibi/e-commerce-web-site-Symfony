@@ -97,11 +97,6 @@ class Product
      */
     private $slug;
 
-    /**
-     * @ORM\OneToMany(targetEntity=RelatedProduct::class, mappedBy="product")
-     */
-    private $relatedProducts;
-
  
 
     public function __construct()
@@ -109,9 +104,7 @@ class Product
         $this->category = new ArrayCollection();
         $this->tagsProducts = new ArrayCollection();
         $this->reviewsProducts = new ArrayCollection();
-        $this->relatedProduct = new ArrayCollection();
         $this->createdAt = new \DateTime();
-        $this->relatedProducts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -331,37 +324,5 @@ class Product
 
         return $this;
     }
-
-    /**
-     * @return Collection|RelatedProduct[]
-     */
-    public function getRelatedProducts(): Collection
-    {
-        return $this->relatedProducts;
-    }
-
-    public function addRelatedProduct(RelatedProduct $relatedProduct): self
-    {
-        if (!$this->relatedProducts->contains($relatedProduct)) {
-            $this->relatedProducts[] = $relatedProduct;
-            $relatedProduct->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRelatedProduct(RelatedProduct $relatedProduct): self
-    {
-        if ($this->relatedProducts->removeElement($relatedProduct)) {
-            // set the owning side to null (unless already changed)
-            if ($relatedProduct->getProduct() === $this) {
-                $relatedProduct->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
-
-
 
 }

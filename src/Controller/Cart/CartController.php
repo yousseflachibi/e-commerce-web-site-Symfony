@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Cart;
 
 use App\Services\CartServices;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +21,7 @@ class CartController extends AbstractController
     public function index(): Response
     {
         $cart = $this->cartServices->getFullCart();
-        if(!$cart){
+        if(!isset($cart['products'])){
             return $this->redirectToRoute("home");
         }
         return $this->render('cart/index.html.twig', [
@@ -34,8 +34,7 @@ class CartController extends AbstractController
      */
     public function addToCart($id): Response{
         $this->cartServices->addToCart($id);
-        return $this->redirectToRoute("cart");
-       
+        return $this->redirectToRoute("cart");       
     }
 
 

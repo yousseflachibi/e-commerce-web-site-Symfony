@@ -17,6 +17,7 @@ class HomeController extends AbstractController
      */
     public function index(ProductRepository $repoProduct): Response
     {
+        
         $products = $repoProduct->findAll();
 
         $productBestSeller = $repoProduct->findByIsBestSeller(1);
