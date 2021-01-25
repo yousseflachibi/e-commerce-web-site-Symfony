@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Carrier;
 use App\Entity\Product;
 use App\Entity\Categories;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,7 +16,7 @@ class DataLoaderController extends AbstractController
     /**
      * @Route("/data", name="data_loader")
      */
-    public function index(EntityManagerInterface $manager): Response
+    public function index(EntityManagerInterface $manager, UserRepository $repoUser): Response
     {
         $file_products = dirname(dirname(__DIR__))."\products.json";
         $file_categories = dirname(dirname(__DIR__))."\categories.json";
@@ -30,7 +31,7 @@ class DataLoaderController extends AbstractController
             $category = new Categories();
             $category->setName($data_category[1])
                      ->setImage($data_category[3]);
-            $manager->persist($category);
+            //$manager->persist($category);
             $categories[] = $category;
         }
 
@@ -41,7 +42,7 @@ class DataLoaderController extends AbstractController
             $carrier->setName($data_carrier[1])
                      ->setDescription($data_carrier[2])
                      ->setPrice($data_carrier[3]);
-            $manager->persist($carrier);
+            //$manager->persist($carrier);
             $carriers[] = $carrier;
         }
 
@@ -59,11 +60,13 @@ class DataLoaderController extends AbstractController
                     ->setTags($data_Product[12])
                     ->setSlug($data_Product[13])
                     ->setCreatedAt(new \DateTime());    
-            $manager->persist($product);
+            //$manager->persist($product);
             $products[] = $product;
         }
 
-        $manager->flush();
+       // $user = $repoUser->find(2);
+       // $user->setRoles(['ROLE_ADMIN']);
+        //$manager->flush();
         
 
         return $this->json([

@@ -26,14 +26,14 @@ class OrderServices{
         $order = new Order();
         $order->setReference($cart->getReference())
               ->setCarrierName($cart->getCarrierName())
-              ->setCarrierPrice($cart->getCarrierPrice())
+              ->setCarrierPrice($cart->getCarrierPrice()/100)
               ->setFullName($cart->getFullName())
               ->setDeliveryAddresss($cart->getDeliveryAddresss())
               ->setMoreInformations($cart->getMoreInformations())
               ->setQuantity($cart->getQuantity())
-              ->setSubtotalHT($cart->getSubTotalHT())
-              ->setTaxe($cart->getTaxe())
-              ->setSubtotalTTC($cart->getSubTotalTTC())
+              ->setSubtotalHT($cart->getSubTotalHT()/100)
+              ->setTaxe($cart->getTaxe()/100)
+              ->setSubtotalTTC($cart->getSubTotalTTC()/100)
               ->setUser($cart->getUser())
               ->setCreatedAt($cart->getCreatedAt());
         $this->manager->persist($order);
@@ -80,7 +80,7 @@ class OrderServices{
         $line_items[] = [
             'price_data' => [
               'currency' => 'usd',
-              'unit_amount' => $cart->getCarrierPrice()*100,
+              'unit_amount' => $cart->getCarrierPrice(),
               'product_data' => [
                 'name' => 'Carrier ( '.$cart->getCarrierName().' )',
                 'images' => [$_ENV['YOUR_DOMAIN'].'/uploads/products/'],
@@ -93,7 +93,7 @@ class OrderServices{
         $line_items[] = [
             'price_data' => [
               'currency' => 'usd',
-              'unit_amount' => $cart->getTaxe()*100,
+              'unit_amount' => $cart->getTaxe(),
               'product_data' => [
                 'name' => 'TVA (20%)',
                 'images' => [$_ENV['YOUR_DOMAIN'].'/uploads/products/'],
