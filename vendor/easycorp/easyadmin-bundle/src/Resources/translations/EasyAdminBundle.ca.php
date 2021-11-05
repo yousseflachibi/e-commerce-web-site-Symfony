@@ -3,8 +3,8 @@
 return [
     'page_title' => [
         // 'dashboard' => '',
-        'detail' => '%entity_label_singular% <small>(#%entity_short_id%)</small>',
-        'edit' => 'Modificar %entity_label_singular% <small>(#%entity_short_id%)</small>',
+        'detail' => '%entity_as_string%',
+        'edit' => 'Modificar %entity_label_singular%',
         'index' => '%entity_label_plural%',
         'new' => 'Crear %entity_label_singular%',
         'exception' => 'Error|Errors',
@@ -115,6 +115,8 @@ return [
         'username' => 'Nom d\'usuari',
         'password' => 'Contrasenya',
         'sign_in' => 'Iniciar sessió',
+        'forgot_password' => 'Heu oblidat la vostra contrasenya?',
+        'remember_me' => 'Recorda\'m',
     ],
 
     'exception' => [
@@ -122,5 +124,11 @@ return [
         // 'entity_remove' => '',
         // 'forbidden_action' => '',
         // 'insufficient_entity_permission' => 'You don't have permission to access this item.',
+    ],
+
+    'autocomplete' => [
+        'no-results-found' => 'No s\'han trobat resultats',
+        // 'no-more-results' => 'No more results',
+        'loading-more-results' => 'Carregant més resultats…',
     ],
 ];

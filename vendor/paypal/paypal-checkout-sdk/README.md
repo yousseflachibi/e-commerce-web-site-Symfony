@@ -52,7 +52,7 @@ $request->body = [
                          "reference_id" => "test_ref_id1",
                          "amount" => [
                              "value" => "100.00",
-                             "currency_code" => "USD"
+                             "currency_code" => "EUR"
                          ]
                      ]],
                      "application_context" => [
@@ -78,12 +78,12 @@ Status Code: 201
 Id: 8GB67279RC051624C
 Intent: CAPTURE
 Gross_amount:
-	Currency_code: USD
+	Currency_code: EUR
 	Value: 100.00
 Purchase_units:
 	1:
 		Amount:
-			Currency_code: USD
+			Currency_code: EUR
 			Value: 100.00
 Create_time: 2018-08-06T23:34:31Z
 Links:

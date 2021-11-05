@@ -111,16 +111,26 @@ final class FormExtension extends AbstractExtension
         return $view->vars['value'];
     }
 
-    public function getFieldLabel(FormView $view): string
+    public function getFieldLabel(FormView $view): ?string
     {
+        if (false === $label = $view->vars['label']) {
+            return null;
+        }
+
+        if (!$label && $labelFormat = $view->vars['label_format']) {
+            $label = str_replace(['%id%', '%name%'], [$view->vars['id'], $view->vars['name']], $labelFormat);
+        } elseif (!$label) {
+            $label = ucfirst(strtolower(trim(preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], $view->vars['name']))));
+        }
+
         return $this->createFieldTranslation(
-            $view->vars['label'],
+            $label,
             $view->vars['label_translation_parameters'] ?: [],
             $view->vars['translation_domain']
         );
     }
 
-    public function getFieldHelp(FormView $view): string
+    public function getFieldHelp(FormView $view): ?string
     {
         return $this->createFieldTranslation(
             $view->vars['help'],
@@ -164,7 +174,7 @@ final class FormExtension extends AbstractExtension
         }
     }
 
-    private function createFieldTranslation(?string $value, array $parameters, $domain): string
+    private function createFieldTranslation(?string $value, array $parameters, $domain): ?string
     {
         if (!$this->translator || !$value || false === $domain) {
             return $value;

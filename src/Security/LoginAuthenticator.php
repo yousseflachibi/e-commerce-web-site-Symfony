@@ -30,13 +30,15 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
+    private $security;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(Security $security,EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->security = $security;
     }
 
     public function supports(Request $request)
@@ -95,8 +97,14 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
-
-        return new RedirectResponse($this->urlGenerator->generate('account'));
+        $role=$this->security->getUser()->getRoles();
+        
+        if ($role[0]=="ROLE_ADMIN") {
+            return new RedirectResponse($this->urlGenerator->generate('admin'));
+        }else{
+            return new RedirectResponse($this->urlGenerator->generate('account'));
+        }
+        
         throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 

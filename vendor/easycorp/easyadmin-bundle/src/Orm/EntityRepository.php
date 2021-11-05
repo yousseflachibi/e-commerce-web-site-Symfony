@@ -14,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Factory\EntityFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Factory\FormFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\ComparisonType;
 use EasyCorp\Bundle\EasyAdminBundle\Provider\AdminContextProvider;
+use Symfony\Component\Uid\Ulid;
 
 /**
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
@@ -64,6 +65,7 @@ final class EntityRepository implements EntityRepositoryInterface
         $isSmallIntegerQuery = ctype_digit($query) && $query >= -32768 && $query <= 32767;
         $isIntegerQuery = ctype_digit($query) && $query >= -2147483648 && $query <= 2147483647;
         $isUuidQuery = 1 === preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i', $query);
+        $isUlidQuery = Ulid::isValid($query);
 
         $dqlParameters = [
             // adding '0' turns the string into a numeric value
@@ -81,6 +83,10 @@ final class EntityRepository implements EntityRepositoryInterface
                 // support arbitrarily nested associations (e.g. foo.bar.baz.qux)
                 $associatedProperties = explode('.', $propertyName);
                 $numAssociatedProperties = \count($associatedProperties);
+
+                if (1 === $numAssociatedProperties) {
+                    throw new \InvalidArgumentException(sprintf('The "%s" property included in the setSearchFields() method is not a valid search field. When using associated properties in search, you must also define the exact field used in the search (e.g. \'%s.id\', \'%s.name\', etc.)', $propertyName, $propertyName, $propertyName));
+                }
 
                 $originalPropertyName = $associatedProperties[0];
                 $originalPropertyMetadata = $entityDto->getPropertyMetadata($originalPropertyName);
@@ -117,6 +123,7 @@ final class EntityRepository implements EntityRepositoryInterface
             // 'citext' is a PostgreSQL extension (https://github.com/EasyCorp/EasyAdminBundle/issues/2556)
             $isTextProperty = \in_array($propertyDataType, ['string', 'text', 'citext', 'array', 'simple_array']);
             $isGuidProperty = \in_array($propertyDataType, ['guid', 'uuid']);
+            $isUlidProperty = 'ulid' === $propertyDataType;
 
             // this complex condition is needed to avoid issues on PostgreSQL databases
             if (
@@ -129,6 +136,9 @@ final class EntityRepository implements EntityRepositoryInterface
             } elseif ($isGuidProperty && $isUuidQuery) {
                 $queryBuilder->orWhere(sprintf('%s.%s = :query_for_uuids', $entityName, $propertyName))
                     ->setParameter('query_for_uuids', $dqlParameters['uuid_query']);
+            } elseif ($isUlidProperty && $isUlidQuery) {
+                $queryBuilder->orWhere(sprintf('%s.%s = :query_for_uuids', $entityName, $propertyName))
+                    ->setParameter('query_for_uuids', $dqlParameters['uuid_query'], 'ulid');
             } elseif ($isTextProperty) {
                 $queryBuilder->orWhere(sprintf('LOWER(%s.%s) LIKE :query_for_text', $entityName, $propertyName))
                     ->setParameter('query_for_text', $dqlParameters['text_query']);
@@ -140,14 +150,14 @@ final class EntityRepository implements EntityRepositoryInterface
 
     private function addOrderClause(QueryBuilder $queryBuilder, SearchDto $searchDto, EntityDto $entityDto): void
     {
-        $aliases = $queryBuilder->getAllAliases();
         foreach ($searchDto->getSort() as $sortProperty => $sortOrder) {
+            $aliases = $queryBuilder->getAllAliases();
             $sortFieldIsDoctrineAssociation = $entityDto->isAssociation($sortProperty);
 
             if ($sortFieldIsDoctrineAssociation) {
                 $sortFieldParts = explode('.', $sortProperty, 2);
                 // check if join has been added once before.
-                if (!\in_array($sortFieldParts[0], $aliases)) {
+                if (!\in_array($sortFieldParts[0], $aliases, true)) {
                     $queryBuilder->leftJoin('entity.'.$sortFieldParts[0], $sortFieldParts[0]);
                 }
 
@@ -194,7 +204,7 @@ final class EntityRepository implements EntityRepositoryInterface
             }
 
             $filterDataDto = FilterDataDto::new($i, $filter, current($queryBuilder->getRootAliases()), $submittedData);
-            $filter->apply($queryBuilder, $filterDataDto, $fields->get($propertyName), $entityDto);
+            $filter->apply($queryBuilder, $filterDataDto, $fields->getByProperty($propertyName), $entityDto);
 
             ++$i;
         }

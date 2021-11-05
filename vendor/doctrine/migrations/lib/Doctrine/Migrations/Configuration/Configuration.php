@@ -42,6 +42,15 @@ final class Configuration
     private $allOrNothing = false;
 
     /** @var bool */
+    private $transactional = true;
+
+    /** @var string|null */
+    private $connectionName;
+
+    /** @var string|null */
+    private $entityManagerName;
+
+    /** @var bool */
     private $checkDbPlatform = true;
 
     /** @var MetadataStorageConfiguration */
@@ -99,6 +108,28 @@ final class Configuration
     public function getMigrationDirectories(): array
     {
         return $this->migrationsDirectories;
+    }
+
+    public function getConnectionName(): ?string
+    {
+        return $this->connectionName;
+    }
+
+    public function setConnectionName(?string $connectionName): void
+    {
+        $this->assertNotFrozen();
+        $this->connectionName = $connectionName;
+    }
+
+    public function getEntityManagerName(): ?string
+    {
+        return $this->entityManagerName;
+    }
+
+    public function setEntityManagerName(?string $entityManagerName): void
+    {
+        $this->assertNotFrozen();
+        $this->entityManagerName = $entityManagerName;
     }
 
     public function setCustomTemplate(?string $customTemplate): void
@@ -163,6 +194,17 @@ final class Configuration
     public function isAllOrNothing(): bool
     {
         return $this->allOrNothing;
+    }
+
+    public function setTransactional(bool $transactional): void
+    {
+        $this->assertNotFrozen();
+        $this->transactional = $transactional;
+    }
+
+    public function isTransactional(): bool
+    {
+        return $this->transactional;
     }
 
     public function setCheckDatabasePlatform(bool $checkDbPlatform): void

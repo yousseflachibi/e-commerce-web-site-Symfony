@@ -101,9 +101,9 @@ class WebDebugToolbarListener implements EventSubscriberInterface
         if (self::DISABLED === $this->mode
             || !$response->headers->has('X-Debug-Token')
             || $response->isRedirection()
-            || ($response->headers->has('Content-Type') && false === strpos($response->headers->get('Content-Type'), 'html'))
+            || ($response->headers->has('Content-Type') && !str_contains($response->headers->get('Content-Type'), 'html'))
             || 'html' !== $request->getRequestFormat()
-            || false !== stripos($response->headers->get('Content-Disposition'), 'attachment;')
+            || false !== stripos($response->headers->get('Content-Disposition', ''), 'attachment;')
         ) {
             return;
         }
@@ -126,8 +126,8 @@ class WebDebugToolbarListener implements EventSubscriberInterface
                     'excluded_ajax_paths' => $this->excludedAjaxPaths,
                     'token' => $response->headers->get('X-Debug-Token'),
                     'request' => $request,
-                    'csp_script_nonce' => isset($nonces['csp_script_nonce']) ? $nonces['csp_script_nonce'] : null,
-                    'csp_style_nonce' => isset($nonces['csp_style_nonce']) ? $nonces['csp_style_nonce'] : null,
+                    'csp_script_nonce' => $nonces['csp_script_nonce'] ?? null,
+                    'csp_style_nonce' => $nonces['csp_style_nonce'] ?? null,
                 ]
             ))."\n";
             $content = substr($content, 0, $pos).$toolbar.substr($content, $pos);

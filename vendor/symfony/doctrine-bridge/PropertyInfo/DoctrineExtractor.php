@@ -48,9 +48,9 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
 
         $properties = array_merge($metadata->getFieldNames(), $metadata->getAssociationNames());
 
-        if ($metadata instanceof ClassMetadataInfo && class_exists('Doctrine\ORM\Mapping\Embedded') && $metadata->embeddedClasses) {
+        if ($metadata instanceof ClassMetadataInfo && class_exists(\Doctrine\ORM\Mapping\Embedded::class) && $metadata->embeddedClasses) {
             $properties = array_filter($properties, function ($property) {
-                return false === strpos($property, '.');
+                return !str_contains($property, '.');
             });
 
             $properties = array_merge($properties, array_keys($metadata->embeddedClasses));
@@ -104,7 +104,12 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
                             /** @var ClassMetadataInfo $subMetadata */
                             $indexProperty = $subMetadata->getSingleAssociationReferencedJoinColumnName($fieldName);
                             $subMetadata = $this->entityManager ? $this->entityManager->getClassMetadata($associationMapping['targetEntity']) : $this->classMetadataFactory->getMetadataFor($associationMapping['targetEntity']);
-                            $typeOfField = $subMetadata->getTypeOfField($indexProperty);
+
+                            //Not a property, maybe a column name?
+                            if (null === ($typeOfField = $subMetadata->getTypeOfField($indexProperty))) {
+                                $fieldName = $subMetadata->getFieldForColumn($indexProperty);
+                                $typeOfField = $subMetadata->getTypeOfField($fieldName);
+                            }
                         }
                     }
 
@@ -124,7 +129,7 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
             )];
         }
 
-        if ($metadata instanceof ClassMetadataInfo && class_exists('Doctrine\ORM\Mapping\Embedded') && isset($metadata->embeddedClasses[$property])) {
+        if ($metadata instanceof ClassMetadataInfo && class_exists(\Doctrine\ORM\Mapping\Embedded::class) && isset($metadata->embeddedClasses[$property])) {
             return [new Type(Type::BUILTIN_TYPE_OBJECT, false, $metadata->embeddedClasses[$property]['class'])];
         }
 
@@ -161,7 +166,7 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
                 case Type::BUILTIN_TYPE_ARRAY:
                     switch ($typeOfField) {
                         case Types::ARRAY:
-                        case Types::JSON_ARRAY:
+                        case 'json_array':
                             return [new Type(Type::BUILTIN_TYPE_ARRAY, $nullable, null, true)];
 
                         case Types::SIMPLE_ARRAY:
@@ -275,7 +280,7 @@ class DoctrineExtractor implements PropertyListExtractorInterface, PropertyTypeE
 
             case Types::ARRAY:
             case Types::SIMPLE_ARRAY:
-            case Types::JSON_ARRAY:
+            case 'json_array':
                 return Type::BUILTIN_TYPE_ARRAY;
         }
 

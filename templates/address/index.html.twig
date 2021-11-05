@@ -1,22 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Address index{% endblock %}
+{% block title %}Adresse{% endblock %}
 
 {% block body %}
-    <h1>Address index</h1>
+    <h1>Adresse</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>FullName</th>
-                <th>Campany</th>
-                <th>Address</th>
-                <th>Complement</th>
-                <th>Phone</th>
-                <th>City</th>
-                <th>CodePostal</th>
-                <th>Country</th>
+                <th>Nom complet</th>
+                <th>Livraison</th>
+                <th>Adresse</th>
+                <th>Complement d'adresse</th>
+                <th>N° de téléphone</th>
+                <th>Ville</th>
+                <th>Code Postal</th>
+                <th>Pays</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -33,17 +33,17 @@
                 <td>{{ address.codePostal }}</td>
                 <td>{{ address.country }}</td>
                 <td>
-                    <a href="{{ path('address_show', {'id': address.id}) }}">show</a>
-                    <a href="{{ path('address_edit', {'id': address.id}) }}">edit</a>
+                    <a href="{{ path('address_show', {'id': address.id}) }}">Afficher</a>
+                    <a href="{{ path('address_edit', {'id': address.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="10">no records found</td>
+                <td colspan="10">aucun résultat trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('address_new') }}">Create new</a>
+    <a href="{{ path('address_new') }}">Créer</a>
 {% endblock %}

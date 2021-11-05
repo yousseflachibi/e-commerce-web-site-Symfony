@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Account AliExprass !{% endblock %}
+{% block title %} Mon compte{% endblock %}
 
 {% block body %}
 
-{{ include("partials/title_section.html.twig", {'name': 'Your Account !'})}}
+{{ include("partials/title_section.html.twig", {'name': 'Mon compte '})}}
 
 <div class="section">
     <div class="container">
@@ -16,16 +16,16 @@
                         <a class="nav-link active" id="dashboard-tab" data-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false"><i class="ti-layout-grid2"></i>Dashboard</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="ti-shopping-cart-full"></i>Orders</a>
+                        <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="ti-shopping-cart-full"></i>Mes commandes</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" id="address-tab" data-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true"><i class="ti-location-pin"></i>My Address</a>
+                        <a class="nav-link" id="address-tab" data-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true"><i class="ti-location-pin"></i>Mes adresses</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" id="account-detail-tab" data-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="ti-id-badge"></i>Account details</a>
+                        <a class="nav-link" id="account-detail-tab" data-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="ti-id-badge"></i>Détails comptes</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_logout')}}"><i class="ti-lock"></i>Logout</a>
+                        <a class="nav-link" href="{{ path('app_logout')}}"><i class="ti-lock"></i>Déconnexion</a>
                       </li>
                     </ul>
                 </div>
@@ -46,12 +46,12 @@
                       <div class="tab-pane fade active show" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
                         <div class="card">
                             <div class="card-header">
-                                <h3>HELLO {{ app.user.firstname | upper }}  {{ app.user.lastname | upper}}</h3>
+                                <h3>Bonjour  {{ app.user.firstname | upper }}  {{ app.user.lastname | upper}}</h3>
                             </div>
                             <div class="card-body">
-                                <p>From your account dashboard. you can easily check &amp; view your <a href="javascript:void(0);" onclick="$('#orders-tab').trigger('click')">recent orders</a>, manage your <a href="javascript:void(0);" onclick="$('#address-tab').trigger('click')">shipping and billing addresses</a> and <a href="javascript:void(0);" onclick="$('#account-detail-tab').trigger('click')">edit your password and account details.</a></p>                      
+                                <p>Depuis le tableau de bord de votre compte. vous pouvez facilement vérifier &amp; voir votre<a href="javascript:void(0);" onclick="$('#orders-tab').trigger('click')">Dernières commandes</a>, gère votre <a href="javascript:void(0);" onclick="$('#address-tab').trigger('click')">adresses de livraison et de facturation</a> et <a href="javascript:void(0);" onclick="$('#account-detail-tab').trigger('click')">modifier votre mot de passe et les détails de votre compte.</a></p>                      
                                 {% if is_granted('ROLE_ADMIN') %}
-                                <a href="{{ path('admin')}}" target="_blank" class="btn btn-fill-out">Access the backoffice</a>
+                                <a href="{{ path('admin')}}" target="_blank" class="btn btn-fill-out">Accéder au backoffice</a>
                                 {% endif %}
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                       <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
                         <div class="card">
                             <div class="card-header">
-                                <h3>Orders</h3>
+                                <h3>commandes</h3>
                             </div>
                             {% if orders %}
                             <div class="card-body">
@@ -67,9 +67,9 @@
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th>Order</th>
+                                                <th>commande</th>
                                                 <th>Date</th>
-                                                <th>Status</th>
+                                                <th>Statut</th>
                                                 <th>Total</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -80,8 +80,8 @@
                                                 <td>{{ order.id }}</td>
                                                 <td>{{ order.createdAt | date('d/m/Y')}}</td>
                                                 <td>Processing</td>
-                                                <td>${{ order.subTotalTTC/100 }} for {{ order.quantity}} item</td>
-                                                <td><a href="{{ path('account_order_details',{'id':order.id})}}" class="btn btn-fill-out btn-sm">View</a></td>
+                                                <td>${{ order.subTotalTTC/100 }} for {{ order.quantity}} produit</td>
+                                                <td><a href="{{ path('account_order_details',{'id':order.id})}}" class="btn btn-fill-out btn-sm">vue</a></td>
                                             </tr>
                                             {% endfor %}
                                             
@@ -91,7 +91,7 @@
                                 </div>
                             </div>
                             {% else %}
-                                <div>Sorry {{ app.user.fullName}}. You have not yet placed an order.</div>
+                                <div>Désolé {{ app.user.fullName}}. Vous n'avez pas encore passé de commande.</div>
                             {% endif %}
                             
                         </div>
@@ -99,7 +99,7 @@
                     <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
                         <div class="row">
                             <div class="col-lg-12">
-                                <a href="{{ path('address_new')}}" class="btn btn-fill-out mb-3">Add new address</a>
+                                <a href="{{ path('address_new')}}" class="btn btn-fill-out mb-3">Ajouter une nouvelle adresse</a>
                             </div>
                         </div>
                         <div class="row">
@@ -110,7 +110,7 @@
                                     <div class="col-lg-6">
                                         <div class="card mb-3 mb-lg-0">
                                             <div class="card-header">
-                                                <h3> Your Address # {{ index }} </h3>
+                                                <h3> Votre adresse # {{ index }} </h3>
                                             </div>
                                             <div class="card-body">
                                                 <address> {{ address.fullName }}<br>
@@ -122,7 +122,7 @@
 
                                                 </address>
                                                 <div class="btn-group">
-                                                    <a href="{{ path('address_edit', {'id':address.id})}}" class="btn btn-success">Edit</a>
+                                                    <a href="{{ path('address_edit', {'id':address.id})}}" class="btn btn-success">Modifier</a>
                                                     {{ include('address/_delete_form.html.twig') }}
                                                 </div>
 
@@ -131,7 +131,7 @@
                                     </div>
                                 {% endfor %}
                             {% else %}
-                                <p>Sorry you haven't added an address to your account yet !</p>
+                                <p>Désolé, vous n'avez pas encore ajouté d'adresse à votre compte !</p>
                             {% endif %}
                            
                         </div>
@@ -139,42 +139,42 @@
                     <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
                         <div class="card">
                             <div class="card-header">
-                                <h3>Account Details</h3>
+                                <h3>compte détails</h3>
                             </div>
                             <div class="card-body">
-                                <p>Already have an account? <a href="#">Log in instead!</a></p>
+                                
                                 <form method="post" name="enq">
                                     <div class="row">
                                         <div class="form-group col-md-6">
-                                            <label>First Name <span class="required">*</span></label>
+                                            <label>Prénom <span class="required">*</span></label>
                                             <input required="" value="{{ app.user.firstname }}" class="form-control" name="name" type="text">
                                          </div>
                                          <div class="form-group col-md-6">
-                                            <label>Last Name <span class="required">*</span></label>
+                                            <label>Nom <span class="required">*</span></label>
                                             <input required="" value="{{ app.user.lastname }}" class="form-control" name="phone">
                                         </div>
                                         <div class="form-group col-md-12">
-                                            <label>Display Name <span class="required">*</span></label>
+                                            <label>Afficher un nom <span class="required">*</span></label>
                                             <input required="" class="form-control" name="dname" type="text">
                                         </div>
                                         <div class="form-group col-md-12">
-                                            <label>Email Address <span class="required">*</span></label>
+                                            <label>Email Addresse <span class="required">*</span></label>
                                             <input required="" value="{{ app.user.email }}" class="form-control" name="email" type="email">
                                         </div>
                                         <div class="form-group col-md-12">
-                                            <label>Current Password <span class="required">*</span></label>
+                                            <label>Mot de passe actuel <span class="required">*</span></label>
                                             <input required="" class="form-control" name="password" type="password">
                                         </div>
                                         <div class="form-group col-md-12">
-                                            <label>New Password <span class="required">*</span></label>
+                                            <label>nouveau mot de passe<span class="required">*</span></label>
                                             <input required="" class="form-control" name="npassword" type="password">
                                         </div>
                                         <div class="form-group col-md-12">
-                                            <label>Confirm Password <span class="required">*</span></label>
+                                            <label>Confirmez le mot de passe <span class="required">*</span></label>
                                             <input required="" class="form-control" name="cpassword" type="password">
                                         </div>
                                         <div class="col-md-12">
-                                            <button type="submit" class="btn btn-fill-out" name="submit" value="Submit">Save</button>
+                                            <button type="submit" class="btn btn-fill-out" name="submit" value="Submit">Enregistrer</button>
                                         </div>
                                     </div>
                                 </form>

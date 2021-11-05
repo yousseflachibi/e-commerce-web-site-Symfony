@@ -24,15 +24,15 @@ use Symfony\Component\Yaml\Yaml;
  */
 class YamlSourceManipulator
 {
-    const EMPTY_LINE_PLACEHOLDER_VALUE = '__EMPTY_LINE__';
-    const COMMENT_PLACEHOLDER_VALUE = '__COMMENT__';
+    public const EMPTY_LINE_PLACEHOLDER_VALUE = '__EMPTY_LINE__';
+    public const COMMENT_PLACEHOLDER_VALUE = '__COMMENT__';
 
-    const UNSET_KEY_FLAG = '__MAKER_VALUE_UNSET';
-    const ARRAY_FORMAT_MULTILINE = 'multi';
-    const ARRAY_FORMAT_INLINE = 'inline';
+    public const UNSET_KEY_FLAG = '__MAKER_VALUE_UNSET';
+    public const ARRAY_FORMAT_MULTILINE = 'multi';
+    public const ARRAY_FORMAT_INLINE = 'inline';
 
-    const ARRAY_TYPE_SEQUENCE = 'sequence';
-    const ARRAY_TYPE_HASH = 'hash';
+    public const ARRAY_TYPE_SEQUENCE = 'sequence';
+    public const ARRAY_TYPE_HASH = 'hash';
 
     /**
      * @var LoggerInterface|null
@@ -570,7 +570,7 @@ class YamlSourceManipulator
 
     private function getEndOfKeyPosition($key)
     {
-        preg_match($this->getKeyRegex($key), $this->contents, $matches, PREG_OFFSET_CAPTURE, $this->currentPosition);
+        preg_match($this->getKeyRegex($key), $this->contents, $matches, \PREG_OFFSET_CAPTURE, $this->currentPosition);
 
         if (empty($matches)) {
             // for integers, the key may not be explicitly printed
@@ -589,7 +589,7 @@ class YamlSourceManipulator
      */
     private function getEndOfPreviousKeyPosition($key): int
     {
-        preg_match($this->getKeyRegex($key), $this->contents, $matches, PREG_OFFSET_CAPTURE, $this->currentPosition);
+        preg_match($this->getKeyRegex($key), $this->contents, $matches, \PREG_OFFSET_CAPTURE, $this->currentPosition);
 
         if (empty($matches)) {
             // for integers, the key may not be explicitly printed
@@ -684,7 +684,7 @@ class YamlSourceManipulator
 
     private function getKeyRegex($key)
     {
-        return sprintf('#%s( )*:#', preg_quote($key));
+        return sprintf('#\b%s\'?( )*:#', preg_quote($key));
     }
 
     private function updateContents(string $newContents, array $newData, int $newPosition)
@@ -863,7 +863,7 @@ class YamlSourceManipulator
                 return $offset;
             }
 
-            preg_match(sprintf('#%s#', $pattern), $this->contents, $matches, PREG_OFFSET_CAPTURE, $offset);
+            preg_match(sprintf('#%s#', $pattern), $this->contents, $matches, \PREG_OFFSET_CAPTURE, $offset);
             if (empty($matches)) {
                 throw new YamlManipulationFailedException(sprintf('Cannot find the original value "%s"', $value));
             }

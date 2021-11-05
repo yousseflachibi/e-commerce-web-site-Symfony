@@ -1,11 +1,15 @@
 {% extends "base.html.twig" %}
 
-{% block title %} AliExprass Shopping ! {% endblock title %}
+{% block title %} Blé d'or Alésia {% endblock title %}
 
 
 {% block body %}
 
-{{ include("partials/title_section.html.twig", {'name':'Home Page'}) }}
+{% if homeSlider %}
+    {{ include("partials/home_slider.html.twig", {'slider': homeSlider }) }}
+{% else %}
+    {{ include("partials/title_section.html.twig", {'name':'text_remplacant'}) }}
+{% endif %}
 
 <div class="container">
 
@@ -14,7 +18,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="heading_s1 text-center">
-                        <h2>Exclusive Products</h2>
+                        <h2>Produits exclusives</h2>
                     </div>
                 </div>
             </div>
@@ -23,16 +27,16 @@
                     <div class="tab-style1">
                         <ul class="nav nav-tabs justify-content-center" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="arrival-tab" data-toggle="tab" href="#arrival" role="tab" aria-controls="arrival" aria-selected="true">New Arrival</a>
+                                <a class="nav-link active" id="arrival-tab" data-toggle="tab" href="#arrival" role="tab" aria-controls="arrival" aria-selected="true">Nouveautés</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="sellers-tab" data-toggle="tab" href="#sellers" role="tab" aria-controls="sellers" aria-selected="false">Best Sellers</a>
+                                <a class="nav-link" id="sellers-tab" data-toggle="tab" href="#sellers" role="tab" aria-controls="sellers" aria-selected="false">Meilleurs ventes </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="featured-tab" data-toggle="tab" href="#featured" role="tab" aria-controls="featured" aria-selected="false">Featured</a>
+                                <a class="nav-link" id="featured-tab" data-toggle="tab" href="#featured" role="tab" aria-controls="featured" aria-selected="false">mieux noté</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="specialoffer-tab" data-toggle="tab" href="#specialoffer" role="tab" aria-controls="specialoffer" aria-selected="false">Special Offer</a>
+                                <a class="nav-link" id="specialoffer-tab" data-toggle="tab" href="#specialoffer" role="tab" aria-controls="specialoffer" aria-selected="false">Promotions</a>
                             </li>
     
                         </ul>
@@ -77,4 +81,6 @@
     </div>
     
 </div>
+
+
 {% endblock %}

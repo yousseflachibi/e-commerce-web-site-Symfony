@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Confirm Checkout AliExprass !{% endblock %}
+{% block title %} Confirmation de la commande{% endblock %}
 
 {% block scriptStripe %}
     <script src="https://js.stripe.com/v3/"></script>
 {% endblock scriptStripe %}
 {% block body %}
 
-{{ include("partials/title_section.html.twig", {'name':'Confirm Checkout'}) }}
+{{ include("partials/title_section.html.twig", {'name':'Confirmation de la commande'}) }}
 
 <div class="section checkout">
 	<div class="container">
@@ -15,25 +15,25 @@
         <div class="row">
         	<div class="col-md-6">
                 <div class="heading_s1">
-                        <h4>Please, Verify Your delivery Address</h4>
+                        <h4>Vérifiez votre adresse de livraison</h4>
 
                         <div class="content" id="address">
                             {{ address | replace({'[spr]' : '<br>'}) | raw}}
-                            <a href="{{ path('address_edit',{'id': address.id})}}" class="btn btn-fill-out mt-1">Edit Address</a>
-                            <a href="{{ path('checkout_edit')}}" class="btn btn-fill-out mt-1">Change Address</a>
+                            <a href="{{ path('address_edit',{'id': address.id})}}" class="btn btn-fill-out mt-1">Modifier l'adresse</a>
+                            <a href="{{ path('checkout_edit')}}" class="btn btn-fill-out mt-1">Changement d'adresse</a>
                         </div>
                         
                 </div>
                 <div class="heading_s1">
-                    <h4>Please, Verify Your carrier</h4>
+                    <h4>Vérifiez votre livraison</h4>
                     <div class="content" id="carrier">
                         {{ carrier  | replace({'[spr]' : '<br>'}) | raw }}
-                        <a href="{{ path('checkout_edit')}}" class="btn btn-fill-out mt-1">Change Carrier</a>
+                        <a href="{{ path('checkout_edit')}}" class="btn btn-fill-out mt-1">Changer la livraison</a>
                     </div>
                 </div>
                 {% if informations %}
                     <div class="heading_s1">
-                        <h4>Please, Verify Additional information</h4>
+                        <h4>Vérifier les informations supplémentaires</h4>
                         <div class="form-group mb-0" id="informations">
                             {{ informations }}
                         </div>
@@ -44,13 +44,13 @@
             <div class="col-md-6">
                 <div class="order_review">
                     <div class="heading_s1">
-                        <h4>Your Orders</h4>
+                        <h4>Votre commande</h4>
                     </div>
                     <div class="table-responsive order_table">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Product</th>
+                                    <th>Produits</th>
                                     <th>Total</th>
                                 </tr>
                             </thead>
@@ -60,7 +60,7 @@
                                     {% for element in cart.products %}
                                     <tr>
                                         <td> {{ element.product.name }} <span class="product-qty">x {{ element.quantity }}</span></td>
-                                        <td>$ {{ element.product.price/100 }}</td>
+                                        <td>€ {{ element.product.price/100 }}</td>
                                     </tr>
                                     {% endfor %}
  
@@ -68,19 +68,19 @@
                             <tfoot>
                                 <tr>
                                     <th>SubTotal HT</th>
-                                    <td class="product-subtotal">${{ cart.data.subTotalHT }}</td>
+                                    <td class="product-subtotal">€{{ cart.data.subTotalHT }}</td>
                                 </tr>
                                 <tr>
                                     <th>Taxe</th>
-                                    <td class="product-subtotal">${{ cart.data.Taxe }}</td>
+                                    <td class="product-subtotal">€{{ cart.data.Taxe }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Shipping ( {{carrier.name}})</th>
-                                    <td class="product-subtotal">${{ carrier.price/100 }}</td>
+                                    <th>Livraison ( {{carrier.name}})</th>
+                                    <td class="product-subtotal">€{{ carrier.price/100 }}</td>
                                 </tr>
                                 <tr>
                                     <th>Total</th>
-                                    <td class="product-subtotal">${{ cart.data.subTotalTTC + carrier.price/100 }}</td>
+                                    <td class="product-subtotal">€{{ cart.data.subTotalTTC + carrier.price/100 }}</td>
                                 </tr>
                             </tfoot>
 
@@ -88,11 +88,11 @@
                     </div>
                     <div class="payment_method">
                         <div class="heading_s1">
-                            <h4>Payment</h4>
+                            <h4>Validation de la commande</h4>
                         </div>
                         <button type="submit" id="checkout-button" 
                         class="btn btn-fill-out btn-block">
-                        Paid | ${{ cart.data.subTotalTTC + carrier.price/100 }}
+                        Paiement | €{{ cart.data.subTotalTTC + carrier.price/100 }}
                     </button>
                     </div>
                     
@@ -108,7 +108,7 @@
 
 {% block javascripts %}
     <script type="text/javascript">
-        var stripe = Stripe("pk_test_51ICmCqGJ92ssJiXRdlkk67IhSWwT3hlTPGbtJeWUNHiihcXDY7AKqbNKFOKRgjDC11Feei2u0n1GDjVw7L7gxMoq00VVoepy9o");
+        var stripe = Stripe("pk_test_51JgCyAK9QyGIazjG5N85Eh7Ba35aYt5t10g0AEpOqgnrLiyiMTnDEmQQL2fxVWRNakvOxKWF1ztibeXx82ymyNuv0094DaW1mV");
     var checkoutButton = document.getElementById("checkout-button");
 
     checkoutButton.addEventListener("click", function () {

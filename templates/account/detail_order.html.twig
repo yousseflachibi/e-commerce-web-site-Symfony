@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Checkout AliExprass !{% endblock %}
+{% block title %} Validation {% endblock %}
 
 {% block body %}
 
-{{ include("partials/title_section.html.twig", {'name':'Order Details'}) }}
+{{ include("partials/title_section.html.twig", {'name':'détails des commandes'}) }}
 
 <div class="section">
 	<div class="container">
@@ -21,12 +21,12 @@
                     	<thead>
                         	<tr>
                             	<th class="product-thumbnail">id</th>
-                                <th class="product-name">Product Name</th>
-                                <th class="product-price">Price</th>
-                                <th class="product-quantity">Quantity</th>
-                                <th class="product-subtotal">SubTotalHT</th>
+                                <th class="product-name">Produit</th>
+                                <th class="product-price">Prix</th>
+                                <th class="product-quantity">Quantité</th>
+                                <th class="product-subtotal">Total hors taxe</th>
                                 <th class="product-subtotal">Taxe</th>
-                                <th class="product-subtotal">SubTotalHT</th>
+                                {# <th class="product-subtotal">SubTotalHT</th> #}
                             </tr>
                         </thead>
                         <tbody>
@@ -50,12 +50,12 @@
                         <tfoot>
                           <tr>
                             <th class="product-thumbnail">id</th>
-                            <th class="product-name">Product Name</th>
-                            <th class="product-price">Price</th>
-                            <th class="product-quantity">Quantity</th>
-                            <th class="product-subtotal">SubTotalHT</th>
+                            <th class="product-name">Produit</th>
+                            <th class="product-price">Prix</th>
+                            <th class="product-quantity">Quantité</th>
+                            <th class="product-subtotal">Total hors taxe</th>
                             <th class="product-subtotal">Taxe</th>
-                            <th class="product-subtotal">SubTotalHT</th>
+                            {# <th class="product-subtotal">SubTotalHT</th> #}
                             </tr>
                         </tfoot>
                     </table>
@@ -77,17 +77,17 @@
             <div class="col-md-6">
             	<div class="border p-3 p-md-4">
                     <div class="heading_s1 mb-3">
-                        <h6>Order Totals</h6>
+                        <h6>Outils de commande</h6>
                     </div>
                     <div class="table-responsive">
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <td class="cart_total_label">Order Subtotal HT</td>
+                                    <td class="cart_total_label">Total hors taxe de la commande</td>
                                     <td class="cart_total_amount">${{ order.subTotalHT/100 }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="cart_total_label">Carrier ({{ order.carrierName }}) </td>
+                                    <td class="cart_total_label">livrasion ({{ order.carrierName }}) </td>
                                     <td class="cart_total_amount">${{ order.carrierPrice/100 }}</td>
                                 </tr>
                                 <tr>

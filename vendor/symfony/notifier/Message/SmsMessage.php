@@ -29,7 +29,7 @@ final class SmsMessage implements MessageInterface
     public function __construct(string $phone, string $subject)
     {
         if ('' === $phone) {
-            throw new InvalidArgumentException(sprintf('"%s" needs a phone number, it cannot be empty.', static::class));
+            throw new InvalidArgumentException(sprintf('"%s" needs a phone number, it cannot be empty.', __CLASS__));
         }
 
         $this->subject = $subject;
@@ -83,7 +83,7 @@ final class SmsMessage implements MessageInterface
     /**
      * @return $this
      */
-    public function transport(string $transport): self
+    public function transport(?string $transport): self
     {
         $this->transport = $transport;
 

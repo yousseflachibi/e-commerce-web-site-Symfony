@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
@@ -18,15 +19,16 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username')
-            ->add('firstname')
-            ->add('lastname')
-            ->add('email')
-            ->add('agreeTerms', CheckboxType::class, [
+            ->add('username',TextType::class,['label'=> "Nom d'utilisateur"])
+            ->add('firstname',TextType::class,['label'=> 'Prénom'])
+            ->add('lastname',TextType::class,['label'=> 'Nom'])
+            ->add('email',TextType::class,['label'=> 'E-mail'])
+            ->add('agreeTerms', CheckboxType::class ,[
                 'mapped' => false,
+                'label'=> 'Accepter les conditions',
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'Vous devez acceptez les conditions.',
                     ]),
                 ],
             ])
@@ -37,17 +39,17 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password',
+                        'message' => "Tapez un mot de passe s'il vous plait",
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'minMessage' => 'Votre mot de passe doit étre au moins{{ limit }} caractères ',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
                 ],
-                'first_options'  => ['label' => 'Password'],
-                'second_options' => ['label' => 'Repeat Password'],
+                'first_options'  => ['label' => 'Mot de passe'],
+                'second_options' => ['label' => 'Confirmer le mot de passe'],
             ])
         ;
     }

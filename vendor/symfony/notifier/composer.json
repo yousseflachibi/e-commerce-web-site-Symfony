@@ -1,7 +1,7 @@
 {
     "name": "symfony/notifier",
     "type": "library",
-    "description": "A library to notify messages",
+    "description": "Sends notifications via one or more channels (email, SMS, ...)",
     "keywords": ["notifier", "notification"],
     "homepage": "https://symfony.com",
     "license": "MIT",
@@ -18,11 +18,12 @@
     "require": {
         "php": ">=7.2.5",
         "symfony/polyfill-php80": "^1.15",
-        "psr/log": "~1.0"
+        "psr/log": "^1|^2|^3"
     },
     "require-dev": {
         "symfony/event-dispatcher-contracts": "^2",
-        "symfony/http-client-contracts": "^2"
+        "symfony/http-client-contracts": "^2",
+        "symfony/messenger": "^4.4 || ^5.0"
     },
     "conflict": {
         "symfony/http-kernel": "<4.4",

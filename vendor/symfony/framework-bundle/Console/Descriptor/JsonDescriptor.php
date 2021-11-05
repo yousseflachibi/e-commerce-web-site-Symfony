@@ -14,6 +14,7 @@ namespace Symfony\Bundle\FrameworkBundle\Console\Descriptor;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\Argument\AbstractArgument;
 use Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -66,7 +67,7 @@ class JsonDescriptor extends Descriptor
         $this->writeData($data, $options);
     }
 
-    protected function describeContainerService($service, array $options = [], ContainerBuilder $builder = null)
+    protected function describeContainerService(object $service, array $options = [], ContainerBuilder $builder = null)
     {
         if (!isset($options['id'])) {
             throw new \InvalidArgumentException('An "id" option must be provided.');
@@ -135,7 +136,7 @@ class JsonDescriptor extends Descriptor
 
     protected function describeEventDispatcherListeners(EventDispatcherInterface $eventDispatcher, array $options = [])
     {
-        $this->writeData($this->getEventDispatcherListenersData($eventDispatcher, \array_key_exists('event', $options) ? $options['event'] : null), $options);
+        $this->writeData($this->getEventDispatcherListenersData($eventDispatcher, $options['event'] ?? null), $options);
     }
 
     protected function describeCallable($callable, array $options = [])
@@ -145,7 +146,7 @@ class JsonDescriptor extends Descriptor
 
     protected function describeContainerParameter($parameter, array $options = [])
     {
-        $key = isset($options['parameter']) ? $options['parameter'] : '';
+        $key = $options['parameter'] ?? '';
 
         $this->writeData([$key => $parameter], $options);
     }
@@ -181,7 +182,7 @@ class JsonDescriptor extends Descriptor
 
     private function writeData(array $data, array $options)
     {
-        $flags = isset($options['json_encoding']) ? $options['json_encoding'] : 0;
+        $flags = $options['json_encoding'] ?? 0;
 
         $this->write(json_encode($data, $flags | \JSON_PRETTY_PRINT)."\n");
     }
@@ -311,7 +312,7 @@ class JsonDescriptor extends Descriptor
                 $data['name'] = $callable[1];
                 $data['class'] = \get_class($callable[0]);
             } else {
-                if (0 !== strpos($callable[1], 'parent::')) {
+                if (!str_starts_with($callable[1], 'parent::')) {
                     $data['name'] = $callable[1];
                     $data['class'] = $callable[0];
                     $data['static'] = true;
@@ -329,7 +330,7 @@ class JsonDescriptor extends Descriptor
         if (\is_string($callable)) {
             $data['type'] = 'function';
 
-            if (false === strpos($callable, '::')) {
+            if (!str_contains($callable, '::')) {
                 $data['name'] = $callable;
             } else {
                 $callableParts = explode('::', $callable);
@@ -346,7 +347,7 @@ class JsonDescriptor extends Descriptor
             $data['type'] = 'closure';
 
             $r = new \ReflectionFunction($callable);
-            if (false !== strpos($r->name, '{closure}')) {
+            if (str_contains($r->name, '{closure}')) {
                 return $data;
             }
             $data['name'] = $r->name;
@@ -391,6 +392,10 @@ class JsonDescriptor extends Descriptor
                 'type' => 'service',
                 'id' => (string) $value,
             ];
+        }
+
+        if ($value instanceof AbstractArgument) {
+            return ['type' => 'abstract', 'text' => $value->getText()];
         }
 
         if ($value instanceof ArgumentInterface) {

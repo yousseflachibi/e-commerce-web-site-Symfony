@@ -34,7 +34,7 @@ class CheckoutController extends AbstractController
         }
 
         if(!$user->getAddresses()->getValues()){
-            $this->addFlash('checkout_message', 'Please add an address to your account without continuing !');
+            $this->addFlash('checkout_message', 'Veuillez ajouter une adresse à votre compte sans continuer !');
             return $this->redirectToRoute("address_new");
         }
 
@@ -63,7 +63,7 @@ class CheckoutController extends AbstractController
         }
 
         if(!$user->getAddresses()->getValues()){
-            $this->addFlash('checkout_message', 'Please add an address to your account without continuing !');
+            $this->addFlash('checkout_message', 'Veuillez ajouter une adresse à votre compte sans continuer ');
             return $this->redirectToRoute("address_new");
         }
 
@@ -75,18 +75,22 @@ class CheckoutController extends AbstractController
 
             if($this->session->get('checkout_data')){
                 $data = $this->session->get('checkout_data');
+              
             }else{
                 $data = $form->getData();
                 $this->session->set('checkout_data',$data);
+                // var_dump($data);
+    
             }
            
             $address = $data['address'];
             $carrier = $data['carrier'];
             $information = $data["informations"];
-
+            //  var_dump($data);
             // Save Cart
             $cart['checkout'] = $data;
             $reference = $orderServices->saveCart($cart,$user);
+            
             
             
             

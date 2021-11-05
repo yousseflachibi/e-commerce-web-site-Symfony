@@ -23,25 +23,21 @@ class EasyAdminTwigExtension extends AbstractExtension
         $this->serviceLocator = $serviceLocator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions()
     {
         return [
             new TwigFunction('ea_url', [$this, 'getAdminUrlGenerator']),
+            new TwigFunction('ea_call_function_if_exists', [$this, 'callFunctionIfExists'], ['needs_environment' => true, 'is_safe' => ['html' => true]]),
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilters()
     {
         return [
             new TwigFilter('ea_flatten_array', [$this, 'flattenArray']),
             new TwigFilter('ea_filesize', [$this, 'fileSize']),
             new TwigFilter('ea_apply_filter_if_exists', [$this, 'applyFilterIfExists'], ['needs_environment' => true]),
+            new TwigFilter('ea_as_string', [$this, 'representAsString']),
         ];
     }
 
@@ -82,6 +78,52 @@ class EasyAdminTwigExtension extends AbstractExtension
         }
 
         return $filter->getCallable()($value, ...$filterArguments);
+    }
+
+    public function representAsString($value): string
+    {
+        if (null === $value) {
+            return '';
+        }
+
+        if (\is_string($value)) {
+            return $value;
+        }
+
+        if (is_numeric($value)) {
+            return (string) $value;
+        }
+
+        if (\is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+
+        if (\is_array($value)) {
+            return sprintf('Array (%d items)', \count($value));
+        }
+
+        if (\is_object($value)) {
+            if (method_exists($value, '__toString')) {
+                return (string) $value;
+            }
+
+            if (method_exists($value, 'getId')) {
+                return sprintf('%s #%s', \get_class($value), $value->getId());
+            }
+
+            return sprintf('%s #%s', \get_class($value), substr(md5(spl_object_hash($value)), 0, 7));
+        }
+
+        return '';
+    }
+
+    public function callFunctionIfExists(Environment $environment, string $functionName, ...$functionArguments)
+    {
+        if (false === $function = $environment->getFunction($functionName)) {
+            return '';
+        }
+
+        return $function->getCallable()(...$functionArguments);
     }
 
     public function getAdminUrlGenerator(array $queryParameters = []): AdminUrlGenerator

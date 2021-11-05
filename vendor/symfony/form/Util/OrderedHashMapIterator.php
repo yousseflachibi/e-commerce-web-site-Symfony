@@ -77,6 +77,19 @@ class OrderedHashMapIterator implements \Iterator
     }
 
     /**
+     * @return array
+     */
+    public function __sleep()
+    {
+        throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
+    }
+
+    public function __wakeup()
+    {
+        throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
+    }
+
+    /**
      * Removes the iterator's cursors from the managed cursors of the
      * corresponding {@link OrderedHashMap} instance.
      */
@@ -89,6 +102,8 @@ class OrderedHashMapIterator implements \Iterator
 
     /**
      * {@inheritdoc}
+     *
+     * @return mixed
      */
     public function current()
     {
@@ -97,6 +112,8 @@ class OrderedHashMapIterator implements \Iterator
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function next()
     {
@@ -113,6 +130,8 @@ class OrderedHashMapIterator implements \Iterator
 
     /**
      * {@inheritdoc}
+     *
+     * @return mixed
      */
     public function key()
     {
@@ -135,6 +154,8 @@ class OrderedHashMapIterator implements \Iterator
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function rewind()
     {

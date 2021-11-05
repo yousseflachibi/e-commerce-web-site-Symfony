@@ -38,8 +38,11 @@ Now, in the root of your project place a file named ``migrations.php``, ``migrat
             ],
 
             'all_or_nothing' => true,
+            'transactional' => true,
             'check_database_platform' => true,
             'organize_migrations' => 'none',
+            'connection' => null,
+            'em' => null,
         ];
 
     .. code-block:: yaml
@@ -56,8 +59,12 @@ Now, in the root of your project place a file named ``migrations.php``, ``migrat
            'MyProject\Component\Migrations': ./Component/MyProject/Migrations
 
         all_or_nothing: true
+        transactional: true
         check_database_platform: true
         organize_migrations: none
+
+        connection: null
+        em: null
 
     .. code-block:: xml
 
@@ -66,6 +73,9 @@ Now, in the root of your project place a file named ``migrations.php``, ``migrat
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://doctrine-project.org/schemas/migrations/configuration/3.0
                             http://doctrine-project.org/schemas/migrations/configuration-3.0.xsd">
+
+            <connection>default</connection>
+            <em>default</em>
 
             <storage>
                 <table-storage
@@ -82,6 +92,7 @@ Now, in the root of your project place a file named ``migrations.php``, ``migrat
             </migrations-paths>
 
             <all-or-nothing>true</all-or-nothing>
+            <transactional>true</transactional>
 
             <check-database-platform>true</check-database-platform>
             <organize_migrations>none</organize_migrations>
@@ -99,13 +110,17 @@ Now, in the root of your project place a file named ``migrations.php``, ``migrat
             },
 
             "migrations_paths": {
-               "MyProject\Migrations": "/data/doctrine/migrations/lib/MyProject/Migrations",
-               "MyProject\Component\Migrations": "./Component/MyProject/Migrations"
+               "MyProject\\Migrations": "/data/doctrine/migrations/lib/MyProject/Migrations",
+               "MyProject\\Component\\Migrations": "./Component/MyProject/Migrations"
             },
 
             "all_or_nothing": true,
+            "transactional": true,
             "check_database_platform": true,
-            "organize_migrations": "none"
+            "organize_migrations": "none",
+
+            "connection": null,
+            "em": null
         }
 
 Please note that if you want to use the YAML configuration option, you will need to install the ``symfony/yaml`` package with composer:
@@ -125,11 +140,18 @@ Here are details about what each configuration option does:
 +----------------------------+------------+------------------------------+----------------------------------------------------------------------------------+
 | all_or_nothing             | no         | false                        | Whether or not to wrap multiple migrations in a single transaction.              |
 +----------------------------+------------+------------------------------+----------------------------------------------------------------------------------+
+| transactional              | no         | true                         | Whether or not to wrap migrations in a single transaction.                       |
+|                            |            |                              |                                                                                  |
++----------------------------+------------+------------------------------+----------------------------------------------------------------------------------+
 | migrations                 | no         | []                           | Manually specify the array of migration versions instead of finding migrations.  |
 +----------------------------+------------+------------------------------+----------------------------------------------------------------------------------+
 | check_database_platform    | no         | true                         | Whether to add a database platform check at the beginning of the generated code. |
 +----------------------------+------------+------------------------------+----------------------------------------------------------------------------------+
 | organize_migrations        | no         | ``none``                     | Whether to organize migration classes under year (``year``) or year and month (``year_and_month``) subdirectories. |
++----------------------------+------------+------------------------------+----------------------------------------------------------------------------------+
+| connection                 | no         | null                         | The named connection to use (available only when ConnectionRegistryConnection is used). |
++----------------------------+------------+------------------------------+----------------------------------------------------------------------------------+
+| em                         | no         | null                         | The named entity manager to use (available only when ManagerRegistryEntityManager is used). |
 +----------------------------+------------+------------------------------+----------------------------------------------------------------------------------+
 
 
@@ -146,7 +168,7 @@ Here the possible options for ``table_storage``:
 +----------------------------+------------+------------------------------+----------------------------------------------------------------------------------+
 | executed_at_column_name    | no         | executed_at                  | The name of the column which stores the date that a migration was executed.      |
 +----------------------------+------------+------------------------------+----------------------------------------------------------------------------------+
-| execution_time_column_name | no         | executed_at                  | The name of the column which stores how long a migration took (milliseconds).    |
+| execution_time_column_name | no         | execution_time               | The name of the column which stores how long a migration took (milliseconds).    |
 +----------------------------+------------+------------------------------+----------------------------------------------------------------------------------+
 
 Manually Providing Migrations
@@ -206,10 +228,17 @@ All or Nothing Transaction
 
 .. note::
 
-    This is only works if your database supports transactions for DDL statements.
+    This only works if your database supports transactions for DDL statements.
 
 When using the ``all_or_nothing`` option, multiple migrations ran at the same time will be wrapped in a single
 transaction. If one migration fails, all migrations will be rolled back
+
+Using or not using transactions
+-------------------------------
+
+By default, migrations are transactional, meaning code in a migration
+is wrapped in a transaction.
+Setting ``transactional`` to ``false`` will disable that.
 
 From the Command Line
 ~~~~~~~~~~~~~~~~~~~~~

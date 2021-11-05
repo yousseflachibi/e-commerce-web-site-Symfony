@@ -25,18 +25,18 @@ class PatchOrder
                     'path' => '/purchase_units/@reference_id==\'PUHF\'/amount',
                     'value' =>
                         array (
-                            'currency_code' => 'USD',
+                            'currency_code' => 'EUR',
                             'value' => '200.00',
                             'breakdown' =>
                                 array (
                                     'item_total' =>
                                         array (
-                                            'currency_code' => 'USD',
+                                            'currency_code' => 'EUR',
                                             'value' => '180.00',
                                         ),
                                     'tax_total' =>
                                         array (
-                                            'currency_code' => 'USD',
+                                            'currency_code' => 'EUR',
                                             'value' => '20.00',
                                         ),
                                 ),

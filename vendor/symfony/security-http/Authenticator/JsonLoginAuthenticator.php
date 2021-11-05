@@ -61,7 +61,7 @@ class JsonLoginAuthenticator implements InteractiveAuthenticatorInterface
      */
     private $translator;
 
-    public function __construct(HttpUtils $httpUtils, UserProviderInterface $userProvider, ?AuthenticationSuccessHandlerInterface $successHandler = null, ?AuthenticationFailureHandlerInterface $failureHandler = null, array $options = [], ?PropertyAccessorInterface $propertyAccessor = null)
+    public function __construct(HttpUtils $httpUtils, UserProviderInterface $userProvider, AuthenticationSuccessHandlerInterface $successHandler = null, AuthenticationFailureHandlerInterface $failureHandler = null, array $options = [], PropertyAccessorInterface $propertyAccessor = null)
     {
         $this->options = array_merge(['username_path' => 'username', 'password_path' => 'password'], $options);
         $this->httpUtils = $httpUtils;
@@ -126,10 +126,10 @@ class JsonLoginAuthenticator implements InteractiveAuthenticatorInterface
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         if (null === $this->failureHandler) {
-            $errorMessage = $exception->getMessageKey();
-
             if (null !== $this->translator) {
                 $errorMessage = $this->translator->trans($exception->getMessageKey(), $exception->getMessageData(), 'security');
+            } else {
+                $errorMessage = strtr($exception->getMessageKey(), $exception->getMessageData());
             }
 
             return new JsonResponse(['error' => $errorMessage], JsonResponse::HTTP_UNAUTHORIZED);

@@ -68,10 +68,19 @@ abstract class AbstractDashboardController extends AbstractController implements
             $userMenuItems[] = MenuItem::linkToExitImpersonation('__ea__user.exit_impersonation', 'fa-user-lock');
         }
 
+        $userName = '';
+        if (method_exists($user, '__toString')) {
+            $userName = (string) $user;
+        } elseif (method_exists($user, 'getUserIdentifier')) {
+            $userName = $user->getUserIdentifier();
+        } elseif (method_exists($user, 'getUsername')) {
+            $userName = $user->getUsername();
+        }
+
         return UserMenu::new()
             ->displayUserName()
             ->displayUserAvatar()
-            ->setName(method_exists($user, '__toString') ? (string) $user : $user->getUsername())
+            ->setName($userName)
             ->setAvatarUrl(null)
             ->setMenuItems($userMenuItems);
     }
@@ -84,6 +93,7 @@ abstract class AbstractDashboardController extends AbstractController implements
     public function configureActions(): Actions
     {
         return Actions::new()
+            ->addBatchAction(Action::BATCH_DELETE)
             ->add(Crud::PAGE_INDEX, Action::NEW)
             ->add(Crud::PAGE_INDEX, Action::EDIT)
             ->add(Crud::PAGE_INDEX, Action::DELETE)

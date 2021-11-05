@@ -16,7 +16,7 @@ namespace SymfonyCasts\Bundle\ResetPassword\Model;
 final class ResetPasswordToken
 {
     /**
-     * @var string selector + non-hashed verifier token
+     * @var string|null selector + non-hashed verifier token
      */
     private $token;
 
@@ -55,7 +55,19 @@ final class ResetPasswordToken
      */
     public function getToken(): string
     {
+        if (null === $this->token) {
+            throw new \RuntimeException('The token property is not set. Calling getToken() after calling clearToken() is not allowed.');
+        }
+
         return $this->token;
+    }
+
+    /**
+     * Allow the token object to be safely persisted in a session.
+     */
+    public function clearToken(): void
+    {
+        $this->token = null;
     }
 
     public function getExpiresAt(): \DateTimeInterface
@@ -123,7 +135,7 @@ final class ResetPasswordToken
     public function getExpiresAtIntervalInstance(): \DateInterval
     {
         if (null === $this->generatedAt) {
-            throw new \LogicException(\sprintf('%s initialized without setting the $generatedAt timestamp.', self::class));
+            throw new \LogicException(sprintf('%s initialized without setting the $generatedAt timestamp.', self::class));
         }
 
         $createdAtTime = \DateTimeImmutable::createFromFormat('U', (string) $this->generatedAt);

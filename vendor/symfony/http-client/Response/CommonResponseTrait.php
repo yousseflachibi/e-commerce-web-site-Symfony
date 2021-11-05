@@ -128,6 +128,19 @@ trait CommonResponseTrait
     }
 
     /**
+     * @return array
+     */
+    public function __sleep()
+    {
+        throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
+    }
+
+    public function __wakeup()
+    {
+        throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
+    }
+
+    /**
      * Closes the response and all its network handles.
      */
     abstract protected function close(): void;

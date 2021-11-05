@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Cart AliExprass !{% endblock %}
+{% block title %}Panier{% endblock %}
 
 {% block body %}
 
-{{ include("partials/title_section.html.twig", {'name':'Your cart'}) }}
+{{ include("partials/title_section.html.twig", {'name':'Votre Panier'}) }}
 
 <div class="section">
 	<div class="container">
@@ -15,11 +15,11 @@
                     	<thead>
                         	<tr>
                             	<th class="product-thumbnail">&nbsp;</th>
-                                <th class="product-name">Product</th>
-                                <th class="product-price">Price</th>
-                                <th class="product-quantity">Quantity</th>
+                                <th class="product-name">produits</th>
+                                <th class="product-price">Prix</th>
+                                <th class="product-quantity">Quantité</th>
                                 <th class="product-subtotal">Total</th>
-                                <th class="product-remove">Remove</th>
+                                <th class="product-remove">Supprimer</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,16 +42,7 @@
                         	
                           
                         </tbody>
-                        <tfoot>
-                          <tr>
-                            	<th class="product-thumbnail">&nbsp;</th>
-                                <th class="product-name">Product</th>
-                                <th class="product-price">Price</th>
-                                <th class="product-quantity">Quantity</th>
-                                <th class="product-subtotal">Total</th>
-                                <th class="product-remove">Remove</th>
-                            </tr>
-                        </tfoot>
+     
                     </table>
                 </div>
             </div>
@@ -71,13 +62,13 @@
             <div class="col-md-6">
             	<div class="border p-3 p-md-4">
                     <div class="heading_s1 mb-3">
-                        <h6>Cart Totals</h6>
+                        <h6>Panier Total</h6>
                     </div>
                     <div class="table-responsive">
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <td class="cart_total_label">Cart Subtotal HT</td>
+                                    <td class="cart_total_label">Subtotal HT</td>
                                     <td class="cart_total_amount">${{ cart.data.subTotalHT}}</td>
                                 </tr>
                                 <tr>
@@ -91,7 +82,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <a href="{{ path('checkout')}}" class="btn btn-fill-out">Proceed To CheckOut</a>
+                    <a href="{{ path('checkout')}}" class="btn btn-fill-out">Valider</a>
                 </div>
             </div>
         </div>

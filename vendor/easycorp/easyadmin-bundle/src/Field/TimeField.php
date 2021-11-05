@@ -15,7 +15,10 @@ final class TimeField implements FieldInterface
     public const OPTION_TIME_PATTERN = 'timePattern';
     public const OPTION_WIDGET = 'widget';
 
-    public static function new(string $propertyName, ?string $label = null): self
+    /**
+     * @param string|false|null $label
+     */
+    public static function new(string $propertyName, $label = null): self
     {
         return (new self())
             ->setProperty($propertyName)
@@ -23,6 +26,7 @@ final class TimeField implements FieldInterface
             ->setTemplateName('crud/field/time')
             ->setFormType(TimeType::class)
             ->addCssClass('field-time')
+            ->setDefaultColumns('col-md-6 col-xxl-5')
             // the proper default values of these options are set on the Crud class
             ->setCustomOption(self::OPTION_TIME_PATTERN, null)
             ->setCustomOption(DateTimeField::OPTION_TIMEZONE, null)

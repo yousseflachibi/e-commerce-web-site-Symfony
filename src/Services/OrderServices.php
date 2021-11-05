@@ -65,7 +65,7 @@ class OrderServices{
 
             $line_items[] = [
                 'price_data' => [
-                  'currency' => 'usd',
+                  'currency' => 'eur',
                   'unit_amount' => $product->getPrice(),
                   'product_data' => [
                     'name' => $product->getName(),
@@ -79,7 +79,7 @@ class OrderServices{
         // Carrier
         $line_items[] = [
             'price_data' => [
-              'currency' => 'usd',
+              'currency' => 'eur',
               'unit_amount' => $cart->getCarrierPrice(),
               'product_data' => [
                 'name' => 'Carrier ( '.$cart->getCarrierName().' )',
@@ -92,7 +92,7 @@ class OrderServices{
         // Taxe
         $line_items[] = [
             'price_data' => [
-              'currency' => 'usd',
+              'currency' => 'eur',
               'unit_amount' => $cart->getTaxe(),
               'product_data' => [
                 'name' => 'TVA (20%)',
@@ -122,7 +122,7 @@ class OrderServices{
         $address = $data['checkout']['address'];
         $carrier = $data['checkout']['carrier'];
         $informations = $data['checkout']['informations'];
-
+        
         $cart->setReference($reference)
              ->setCarrierName($carrier->getName())
              ->setCarrierPrice($carrier->getPrice()/100)

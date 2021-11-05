@@ -38,9 +38,13 @@ final class CommonPreConfigurator implements FieldConfiguratorInterface
     {
         $translationDomain = $context->getI18n()->getTranslationDomain();
 
-        $value = $this->buildValueOption($field, $entityDto);
-        $field->setValue($value);
-        $field->setFormattedValue($value);
+        // if a field already has set a value, someone has written something to
+        // it (as a virtual field or overwrite); don't modify the value in that case
+        if (null === $field->getValue()) {
+            $value = $this->buildValueOption($field, $entityDto);
+            $field->setValue($value);
+            $field->setFormattedValue($value);
+        }
 
         $label = $this->buildLabelOption($field, $translationDomain, $context->getCrud()->getCurrentPage());
         $field->setLabel($label);
@@ -74,7 +78,7 @@ final class CommonPreConfigurator implements FieldConfiguratorInterface
         }
 
         if (null !== $field->getTextAlign()) {
-            $field->setFormTypeOptionIfNotSet('attr.align', $field->getTextAlign());
+            $field->setFormTypeOptionIfNotSet('attr.data-ea-align', $field->getTextAlign());
         }
 
         $field->setFormTypeOptionIfNotSet('label', $field->getLabel());
@@ -102,7 +106,10 @@ final class CommonPreConfigurator implements FieldConfiguratorInterface
         return $this->translator->trans($help, $field->getTranslationParameters(), $translationDomain);
     }
 
-    private function buildLabelOption(FieldDto $field, string $translationDomain, ?string $currentPage): ?string
+    /**
+     * @return string|false|null
+     */
+    private function buildLabelOption(FieldDto $field, string $translationDomain, ?string $currentPage)
     {
         // don't autogenerate a label for these special fields (there's a dedicated configurator for them)
         if (FormField::class === $field->getFieldFqcn()) {
@@ -156,8 +163,9 @@ final class CommonPreConfigurator implements FieldConfiguratorInterface
             return $templatePath;
         }
 
+        // if field has a value set, don't display it as inaccessible (needed e.g. for virtual fields)
         $isPropertyReadable = $this->propertyAccessor->isReadable($entityDto->getInstance(), $field->getProperty());
-        if (!$isPropertyReadable) {
+        if (!$isPropertyReadable && null === $field->getValue()) {
             return $adminContext->getTemplatePath('label/inaccessible');
         }
 
@@ -211,6 +219,7 @@ final class CommonPreConfigurator implements FieldConfiguratorInterface
             ->replaceMatches('/[_\s]+/', ' ')
             ->trim()
             ->lower()
-            ->title(true);
+            ->title(true)
+            ->toString();
     }
 }

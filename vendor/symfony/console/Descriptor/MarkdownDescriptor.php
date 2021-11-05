@@ -31,7 +31,7 @@ class MarkdownDescriptor extends Descriptor
     /**
      * {@inheritdoc}
      */
-    public function describe(OutputInterface $output, $object, array $options = [])
+    public function describe(OutputInterface $output, object $object, array $options = [])
     {
         $decorated = $output->isDecorated();
         $output->setDecorated(false);
@@ -147,7 +147,7 @@ class MarkdownDescriptor extends Descriptor
      */
     protected function describeApplication(Application $application, array $options = [])
     {
-        $describedNamespace = isset($options['namespace']) ? $options['namespace'] : null;
+        $describedNamespace = $options['namespace'] ?? null;
         $description = new ApplicationDescription($application, $describedNamespace);
         $title = $this->getApplicationTitle($application);
 

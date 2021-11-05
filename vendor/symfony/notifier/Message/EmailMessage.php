@@ -39,7 +39,7 @@ final class EmailMessage implements MessageInterface
     public static function fromNotification(Notification $notification, EmailRecipientInterface $recipient): self
     {
         if ('' === $recipient->getEmail()) {
-            throw new InvalidArgumentException(sprintf('"%s" needs an email, it cannot be empty.', static::class));
+            throw new InvalidArgumentException(sprintf('"%s" needs an email, it cannot be empty.', __CLASS__));
         }
 
         if (!class_exists(NotificationEmail::class)) {
@@ -102,10 +102,13 @@ final class EmailMessage implements MessageInterface
     /**
      * @return $this
      */
-    public function transport(string $transport): self
+    public function transport(?string $transport): self
     {
         if (!$this->message instanceof Email) {
             throw new LogicException('Cannot set a Transport on a RawMessage instance.');
+        }
+        if (null === $transport) {
+            return $this;
         }
 
         $this->message->getHeaders()->addTextHeader('X-Transport', $transport);

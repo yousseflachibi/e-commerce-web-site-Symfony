@@ -38,33 +38,33 @@ class CreateOrder
                             'soft_descriptor' => 'HighFashions',
                             'amount' =>
                                 array(
-                                    'currency_code' => 'USD',
+                                    'currency_code' => 'EUR',
                                     'value' => '220.00',
                                     'breakdown' =>
                                         array(
                                             'item_total' =>
                                                 array(
-                                                    'currency_code' => 'USD',
+                                                    'currency_code' => 'EUR',
                                                     'value' => '180.00',
                                                 ),
                                             'shipping' =>
                                                 array(
-                                                    'currency_code' => 'USD',
+                                                    'currency_code' => 'EUR',
                                                     'value' => '20.00',
                                                 ),
                                             'handling' =>
                                                 array(
-                                                    'currency_code' => 'USD',
+                                                    'currency_code' => 'EUR',
                                                     'value' => '10.00',
                                                 ),
                                             'tax_total' =>
                                                 array(
-                                                    'currency_code' => 'USD',
+                                                    'currency_code' => 'EUR',
                                                     'value' => '20.00',
                                                 ),
                                             'shipping_discount' =>
                                                 array(
-                                                    'currency_code' => 'USD',
+                                                    'currency_code' => 'EUR',
                                                     'value' => '10.00',
                                                 ),
                                         ),

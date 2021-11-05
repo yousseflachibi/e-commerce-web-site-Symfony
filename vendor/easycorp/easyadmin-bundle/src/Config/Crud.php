@@ -24,7 +24,8 @@ class Crud
     /** @var CrudDto */
     private $dto;
 
-    private $paginatorPageSize = 15;
+    private $paginatorPageSize = 20;
+    private $paginatorRangeSize = 3;
     private $paginatorFetchJoinCollection = true;
     private $paginatorUseOutputWalkers;
 
@@ -41,7 +42,7 @@ class Crud
     }
 
     /**
-     * @param string|callable $label The callable signature is: fn ($entityInstance, string $pageName): string
+     * @param string|callable $label The callable signature is: fn ($entityInstance, $pageName): string
      */
     public function setEntityLabelInSingular($label): self
     {
@@ -51,7 +52,7 @@ class Crud
     }
 
     /**
-     * @param string|callable $label The callable signature is: fn ($entityInstance, string $pageName): string
+     * @param string|callable $label The callable signature is: fn ($entityInstance, $pageName): string
      */
     public function setEntityLabelInPlural($label): self
     {
@@ -216,7 +217,16 @@ class Crud
 
     public function showEntityActionsAsDropdown(bool $showAsDropdown = true): self
     {
+        trigger_deprecation('easycorp/easyadmin-bundle', '3.5.0', 'The "%s" method is deprecated because the default behavior changed to render entity actions as dropdown. Use "showEntityActionsInlined()" method if you want to revert this change.', __METHOD__);
+
         $this->dto->setShowEntityActionsAsDropdown($showAsDropdown);
+
+        return $this;
+    }
+
+    public function showEntityActionsInlined(bool $showInlined = true): self
+    {
+        $this->dto->setShowEntityActionsAsDropdown(!$showInlined);
 
         return $this;
     }
@@ -235,6 +245,17 @@ class Crud
         }
 
         $this->paginatorPageSize = $maxResultsPerPage;
+
+        return $this;
+    }
+
+    public function setPaginatorRangeSize(int $maxPagesOnEachSide): self
+    {
+        if ($maxPagesOnEachSide < 0) {
+            throw new \InvalidArgumentException('The minimum value of paginator range size is 0.');
+        }
+
+        $this->paginatorRangeSize = $maxPagesOnEachSide;
 
         return $this;
     }
@@ -274,10 +295,8 @@ class Crud
 
     public function addFormTheme(string $themePath): self
     {
-        // custom form themes are added first to give them more priority
-        $formThemes = $this->dto->getFormThemes();
-        array_unshift($formThemes, $themePath);
-        $this->dto->setFormThemes($formThemes);
+        // custom form themes are added last to give them more priority
+        $this->dto->setFormThemes(array_merge($this->dto->getFormThemes(), [$themePath]));
 
         return $this;
     }
@@ -326,7 +345,7 @@ class Crud
 
     public function getAsDto(): CrudDto
     {
-        $this->dto->setPaginator(new PaginatorDto($this->paginatorPageSize, $this->paginatorFetchJoinCollection, $this->paginatorUseOutputWalkers));
+        $this->dto->setPaginator(new PaginatorDto($this->paginatorPageSize, $this->paginatorRangeSize, 1, $this->paginatorFetchJoinCollection, $this->paginatorUseOutputWalkers));
 
         return $this->dto;
     }

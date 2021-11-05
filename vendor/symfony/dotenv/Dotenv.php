@@ -71,7 +71,7 @@ final class Dotenv
      *
      * @return $this
      */
-    public function usePutenv($usePutenv = true): self
+    public function usePutenv(bool $usePutenv = true): self
     {
         $this->usePutenv = $usePutenv;
 
@@ -312,7 +312,7 @@ final class Dotenv
             throw $this->createFormatException('Whitespace are not supported before the value');
         }
 
-        $loadedVars = array_flip(explode(',', isset($_SERVER['SYMFONY_DOTENV_VARS']) ? $_SERVER['SYMFONY_DOTENV_VARS'] : (isset($_ENV['SYMFONY_DOTENV_VARS']) ? $_ENV['SYMFONY_DOTENV_VARS'] : '')));
+        $loadedVars = array_flip(explode(',', $_SERVER['SYMFONY_DOTENV_VARS'] ?? ($_ENV['SYMFONY_DOTENV_VARS'] ?? '')));
         unset($loadedVars['']);
         $v = '';
 

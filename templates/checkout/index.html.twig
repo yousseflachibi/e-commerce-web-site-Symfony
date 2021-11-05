@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} Checkout AliExprass !{% endblock %}
+{% block title %} Validation de la commande{% endblock %}
 
 {% block body %}
 
-{{ include("partials/title_section.html.twig", {'name':'Checkout'}) }}
+{{ include("partials/title_section.html.twig", {'name':'Validation de la commande'}) }}
 
 <div class="section checkout">
 	<div class="container">
@@ -12,22 +12,22 @@
         <div class="row">
         	<div class="col-md-6">
                 <div class="heading_s1">
-                        <h4>Your delivery Address</h4>
+                        <h4>Mode de livraison</h4>
 
                         <div class="content">
                             {{ form_widget(checkout.address) | replace({'[spr]' : '<br>'}) | raw}}
                         </div>
-                        <a href="{{ path('address_new')}}" class="btn btn-fill-out btn-block mt-1">Add new address</a>
+                        <a href="{{ path('address_new')}}" class="btn btn-fill-out btn-block mt-1">Ajouter nouvelle adresse</a>
                 </div>
                 <div class="heading_s1">
-                    <h4>Your carrier</h4>
+                    <h4>Livraison</h4>
                     <div class="content">
                         {{ form_widget(checkout.carrier)  | replace({'[spr]' : '<br>'}) | raw }}
 
                     </div>
                 </div>
                 <div class="heading_s1">
-                    <h4>Additional information</h4>
+                    <h4>Information additionnelle</h4>
                     <div class="form-group mb-0">
                         {{ form_widget(checkout.informations) }}
                     </div>
@@ -37,13 +37,13 @@
             <div class="col-md-6">
                 <div class="order_review">
                     <div class="heading_s1">
-                        <h4>Your Orders</h4>
+                        <h4>Votre commande</h4>
                     </div>
                     <div class="table-responsive order_table">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Product</th>
+                                    <th>Produits</th>
                                     <th>Total</th>
                                 </tr>
                             </thead>
@@ -53,7 +53,7 @@
                                     {% for element in cart.products %}
                                     <tr>
                                         <td> {{ element.product.name }} <span class="product-qty">x {{ element.quantity }}</span></td>
-                                        <td>$ {{ element.product.price/100 }}</td>
+                                        <td>€ {{ element.product.price/100 }}</td>
                                     </tr>
                                     {% endfor %}
  
@@ -61,15 +61,15 @@
                             <tfoot>
                                 <tr>
                                     <th>SubTotal HT</th>
-                                    <td class="product-subtotal">${{ cart.data.subTotalHT }}</td>
+                                    <td class="product-subtotal">€{{ cart.data.subTotalHT }}</td>
                                 </tr>
                                 <tr>
                                     <th>Taxe</th>
-                                    <td class="product-subtotal">${{ cart.data.Taxe }}</td>
+                                    <td class="product-subtotal">€{{ cart.data.Taxe }}</td>
                                 </tr>
                                 <tr>
                                     <th>Total</th>
-                                    <td class="product-subtotal">${{ cart.data.subTotalTTC }}</td>
+                                    <td class="product-subtotal">€{{ cart.data.subTotalTTC }}</td>
                                 </tr>
                             </tfoot>
 
@@ -77,11 +77,11 @@
                     </div>
                     <div class="payment_method">
                         <div class="heading_s1">
-                            <h4>Payment</h4>
+                            <h4>Paiement</h4>
                         </div>
                         
                     </div>
-                    <button type="submit" id="checkout-button" class="btn btn-fill-out btn-block">Place Order</button>
+                    <button type="submit" id="checkout-button" class="btn btn-fill-out btn-block">validation de la commande</button>
                 </div>
             </div>
         </div>

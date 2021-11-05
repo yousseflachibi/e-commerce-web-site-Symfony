@@ -3,8 +3,8 @@
 return [
     'page_title' => [
         'dashboard' => 'Dashboard',
-        'detail' => '%entity_label_singular% <small>(#%entity_short_id%)</small>',
-        'edit' => 'Edit %entity_label_singular% <small>(#%entity_short_id%)</small>',
+        'detail' => '%entity_as_string%',
+        'edit' => 'Edit %entity_label_singular%',
         'index' => '%entity_label_plural%',
         'new' => 'Create %entity_label_singular%',
         'exception' => 'Error|Errors',
@@ -12,7 +12,7 @@ return [
 
     'datagrid' => [
         'hidden_results' => 'Some results can\'t be displayed because you don\'t have enough permissions',
-        'no_results' => 'No results found.',
+        'no_results' => 'aucun résultat',
     ],
 
     'paginator' => [
@@ -63,7 +63,7 @@ return [
     ],
 
     'batch_action_modal' => [
-        'title' => 'Do you really want to alter the selected items?',
+        'title' => 'You are going to apply the "%action_name%" action to %num_items% item(s).',
         'content' => 'There is no undo for this operation.',
         'action' => 'Proceed',
     ],
@@ -116,6 +116,8 @@ return [
         'username' => 'Username',
         'password' => 'Password',
         'sign_in' => 'Sign in',
+        'forgot_password' => 'Forgot Your Password?',
+        'remember_me' => 'Remember me',
     ],
 
     'exception' => [
@@ -123,5 +125,11 @@ return [
         'entity_remove' => 'This item can\'t be deleted because other items depend on it.',
         'forbidden_action' => 'The requested action can\'t be performed on this item.',
         'insufficient_entity_permission' => 'You don\'t have permission to access this item.',
+    ],
+
+    'autocomplete' => [
+        'no-results-found' => 'aucun résultat',
+        'no-more-results' => 'aucun résultat',
+        'loading-more-results' => 'Loading more results…',
     ],
 ];

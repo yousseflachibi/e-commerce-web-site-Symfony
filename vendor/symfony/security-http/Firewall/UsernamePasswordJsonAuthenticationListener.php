@@ -79,8 +79,8 @@ class UsernamePasswordJsonAuthenticationListener extends AbstractListener
 
     public function supports(Request $request): ?bool
     {
-        if (false === strpos($request->getRequestFormat(), 'json')
-            && false === strpos($request->getContentType(), 'json')
+        if (!str_contains($request->getRequestFormat() ?? '', 'json')
+            && !str_contains($request->getContentType() ?? '', 'json')
         ) {
             return false;
         }
@@ -188,10 +188,10 @@ class UsernamePasswordJsonAuthenticationListener extends AbstractListener
         }
 
         if (!$this->failureHandler) {
-            $errorMessage = $failed->getMessageKey();
-
             if (null !== $this->translator) {
                 $errorMessage = $this->translator->trans($failed->getMessageKey(), $failed->getMessageData(), 'security');
+            } else {
+                $errorMessage = strtr($failed->getMessageKey(), $failed->getMessageData());
             }
 
             return new JsonResponse(['error' => $errorMessage], 401);

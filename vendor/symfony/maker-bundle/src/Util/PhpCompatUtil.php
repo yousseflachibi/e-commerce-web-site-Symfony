@@ -43,6 +43,13 @@ class PhpCompatUtil
         return version_compare($version, '7.4', '>=');
     }
 
+    public function canUseUnionTypes(): bool
+    {
+        $version = $this->getPhpVersion();
+
+        return version_compare($version, '8alpha', '>=');
+    }
+
     protected function getPhpVersion(): string
     {
         $rootDirectory = $this->fileManager->getRootDirectory();
@@ -50,13 +57,13 @@ class PhpCompatUtil
         $composerLockPath = sprintf('%s/composer.lock', $rootDirectory);
 
         if (!$this->fileManager->fileExists($composerLockPath)) {
-            return PHP_VERSION;
+            return \PHP_VERSION;
         }
 
         $lockFileContents = json_decode($this->fileManager->getFileContents($composerLockPath), true);
 
         if (empty($lockFileContents['platform-overrides']) || empty($lockFileContents['platform-overrides']['php'])) {
-            return PHP_VERSION;
+            return \PHP_VERSION;
         }
 
         return $lockFileContents['platform-overrides']['php'];

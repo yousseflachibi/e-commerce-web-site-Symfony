@@ -23,13 +23,13 @@ class StripeSuccessPaymentController extends AbstractController
         }
 
         if(!$order->getIsPaid()){
-            // commande payé
+            // commande payée
             $order->setIsPaid(true);
             $manager->flush();
             $cartServices->deleteCart();
 
             // un mail au client
-
+            //
 
         }
 

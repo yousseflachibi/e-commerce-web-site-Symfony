@@ -44,7 +44,7 @@ class AddressController extends AbstractController
                 return $this->redirectToRoute('checkout');
             }
             
-            $this->addFlash('address_message', 'Your address has been saved');
+            $this->addFlash('address_message', 'Votre adresse a été enregistrée');
             return $this->redirectToRoute('account');
         }
 
@@ -72,7 +72,7 @@ class AddressController extends AbstractController
                 $this->session->set('checkout_data', $data);
                 return $this->redirectToRoute("checkout_confirm");
             }
-            $this->addFlash('address_message', 'Your address has been edited');
+            $this->addFlash('address_message', 'Votre adresse a été modifiée');
             return $this->redirectToRoute('account');
         }
 
@@ -91,7 +91,7 @@ class AddressController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($address);
             $entityManager->flush();
-            $this->addFlash('address_message', 'Your address has been deleted');
+            $this->addFlash('address_message', 'Votre adresse était supprimer avec succée');
         }
 
         return $this->redirectToRoute('account');
